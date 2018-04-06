@@ -1,36 +1,61 @@
+import { Component } from 'react'
 import initStore from '../lib/initRedux'
 import withRedux from 'next-redux-wrapper'
 import { startExperiment } from '../lib/redux/reducers/experiments'
 import headerTextExperiment from '../experiments/headerText'
 import cookies from 'next-cookies'
+import { track } from '../lib/analytics'
 
-const Index = ({experiments}) => (
-  <div>
-    { experiments.active[headerTextExperiment.name] === 'control' ? "Welcome to Next.js!" : null }
-    { experiments.active[headerTextExperiment.name] === 'mine' ? "Welcome to MY Next.js!" : null }
-  </div>
-)
-/* context: {req, res, query, isServer, store} */
-Index.getInitialProps = (ctx) => {
-  const { store } = ctx
-  const dispatchStartExperiment = ({name, variant}) => {
-    console.log('starting experiment')
-    store.dispatch(startExperiment({
-      name,
-      variant
-    }))
+class Index extends Component {
+  static getInitialProps (ctx) {
+    /* ctx: {req, res, query, isServer, store} */
+    const { store } = ctx
+    const dispatchStartExperiment = ({name, variant}) => {
+      store.dispatch(startExperiment({
+        name,
+        variant
+      }))
+    }
+
+    const activeExperiments = [
+      headerTextExperiment
+    ]
+
+    headerTextExperiment.once('variant.selected', dispatchStartExperiment)
+
+    let { userId } = cookies(ctx)
+    activeExperiments.forEach((experiment) => {
+      experiment.start({userId})
+    })
   }
 
-  const activeExperiments = [
-    headerTextExperiment
-  ]
+  componentDidMount () {
+    const { experiments } = this.props
 
-  headerTextExperiment.on('variant.selected', dispatchStartExperiment)
+    if (experiments.active[headerTextExperiment.name]) {
+      // startExperiment just returns the redux action object
+      // we can make use of this to look up the analytics
+      // event name and value
+      let analytics = startExperiment({
+        name: headerTextExperiment.name,
+        variant: experiments.active[headerTextExperiment.name]
+      }).meta.analytics
+      track({
+        event: analytics.event,
+        value: analytics.value
+      })
+    }
+  }
 
-  let { userId } = cookies(ctx)
-  activeExperiments.forEach((experiment) => {
-    experiment.start({userId})
-  })
+  render () {
+    const { experiments } = this.props
+    return (
+      <div>
+        { experiments.active[headerTextExperiment.name] === 'control' ? "Welcome to Next.js!" : null }
+        { experiments.active[headerTextExperiment.name] === 'mine' ? "Welcome to MY Next.js!" : null }
+      </div>
+    )
+  }
 }
 
 const mapStateToProps = ({ experiments }) => ({
