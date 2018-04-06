@@ -1,13 +1,13 @@
 import Experiment from '../lib/Experiment'
 
-const heroTextExperiment = new Experiment({
+const headerTextExperiment = new Experiment({
   name: 'Header Text',
   variants: {
-    transform: {
+    control: {
       weight: 50,
       displayName: 'control'
     },
-    superpowers: {
+    mine: {
       weight: 50,
       displayName: 'mine'
     }
