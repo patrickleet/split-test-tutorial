@@ -17,5 +17,10 @@
   "bugs": {
     "url": "https://github.com/patrickleet/split-test-tutorial/issues"
   },
-  "homepage": "https://github.com/patrickleet/split-test-tutorial#readme"
+  "homepage": "https://github.com/patrickleet/split-test-tutorial#readme",
+  "dependencies": {
+    "next": "^5.1.0",
+    "react": "^16.3.1",
+    "react-dom": "^16.3.1"
+  }
 }
