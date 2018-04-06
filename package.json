@@ -1,0 +1,21 @@
+{
+  "name": "split-test-tutorial",
+  "version": "1.0.0",
+  "description": "SSR split-tests with redux and next.js",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/patrickleet/split-test-tutorial.git"
+  },
+  "author": "Patrick Scott",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/patrickleet/split-test-tutorial/issues"
+  },
+  "homepage": "https://github.com/patrickleet/split-test-tutorial#readme"
+}
