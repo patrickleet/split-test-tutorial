@@ -51,6 +51,12 @@ class Index extends Component {
     const { experiments } = this.props
     return (
       <div>
+        <Head>
+          <title>SSR Split Tests</title>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+          <script dangerouslySetInnerHTML={{__html: ga}} />
+          <script dangerouslySetInnerHTML={{__html: fb}} />
+        </Head>
         { experiments.active[headerTextExperiment.name] === 'control' ? "Welcome to Next.js!" : null }
         { experiments.active[headerTextExperiment.name] === 'mine' ? "Welcome to MY Next.js!" : null }
       </div>
