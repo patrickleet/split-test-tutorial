@@ -4,7 +4,12 @@ import withRedux from 'next-redux-wrapper'
 import { startExperiment } from '../lib/redux/reducers/experiments'
 import headerTextExperiment from '../experiments/headerText'
 import cookies from 'next-cookies'
+import Head from 'next/head'
+import ga from '../lib/analytics/ga'
+import fb from '../lib/analytics/fb'
 import { track } from '../lib/analytics'
+import SignUpForm from '../components/SignUpForm'
+import { signupLead}  from '../lib/redux/reducers/lead'
 
 class Index extends Component {
   static getInitialProps (ctx) {
@@ -48,7 +53,7 @@ class Index extends Component {
   }
 
   render () {
-    const { experiments } = this.props
+    const { experiments, lead, signupLead } = this.props
     return (
       <div>
         <Head>
@@ -57,16 +62,22 @@ class Index extends Component {
           <script dangerouslySetInnerHTML={{__html: ga}} />
           <script dangerouslySetInnerHTML={{__html: fb}} />
         </Head>
-        { experiments.active[headerTextExperiment.name] === 'control' ? "Welcome to Next.js!" : null }
-        { experiments.active[headerTextExperiment.name] === 'mine' ? "Welcome to MY Next.js!" : null }
+        { experiments.active[headerTextExperiment.name] === 'control' ? <h1>Welcome to Next.js!</h1> : null }
+        { experiments.active[headerTextExperiment.name] === 'mine' ? <h1>Welcome to MY Next.js!</h1> : null }
+        <SignUpForm lead={lead} signup={signupLead}/>
       </div>
     )
   }
 }
 
-const mapStateToProps = ({ experiments }) => ({
-  experiments
+const mapStateToProps = ({ experiments, lead }) => ({
+  experiments,
+  lead
 })
-const mapDispatchToProps = () => ({})
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  signupLead: ({email}) => {
+    dispatch(signupLead({email}))
+  }
+})
 
 export default withRedux(initStore, mapStateToProps, mapDispatchToProps)(Index)
