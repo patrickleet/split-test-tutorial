@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+
+  my-container:
+    image: my-container
+    ports:
+      - 3000:3000
