@@ -19,3 +19,8 @@ services:
     image: mongo
     networks:
       - default
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
