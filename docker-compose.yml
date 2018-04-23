@@ -10,3 +10,12 @@ services:
     ports:
       - 3000:3000
     command: bash -c "npm i && npm run dev"
+    environment:
+      - MONGO_URL=mongodb://mymongodb:27017/mydbname
+    networks:
+      - default
+
+  mymongodb:
+    image: mongo
+    networks:
+      - default
