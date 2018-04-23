@@ -3,6 +3,10 @@ version: '3.4'
 services:
 
   my-container:
-    image: my-container
+    image: node:9
+    volumes:
+      - .:/usr/src/svc
+    working_dir: /usr/src/svc
     ports:
       - 3000:3000
+    command: bash -c "npm i && npm run dev"

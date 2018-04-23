@@ -1,0 +1,10 @@
+version: '3.4'
+
+services:
+
+  my-container:
+    image: my-container
+    environment:
+      NODE_ENV: production
+    ports:
+      - 3000:3000
