@@ -1,19 +1,47 @@
 version: '3.4'
 
+networks:
+
+  proxy:
+
 services:
+
+  proxy:
+    image: nginx
+    ports:
+      - 80:80
+    networks:
+      - proxy
+    command: |
+      bash -c 'bash -s <<EOF
+        cat > /etc/nginx/nginx.conf <<EON
+          daemon off;
+          events {}
+          http {
+            gzip on;
+
+            server {
+              listen 80;
+              location / {
+                proxy_pass http://my-container:3000;
+              }
+            }
+          }
+      EON
+      nginx
+      EOF'
 
   my-container:
     image: node:9
     volumes:
       - .:/usr/src/svc
     working_dir: /usr/src/svc
-    ports:
-      - 3000:3000
     command: bash -c "npm i && npm run dev"
     environment:
       - MONGO_URL=mongodb://mymongodb:27017/mydbname
     networks:
       - default
+      - proxy
 
   mymongodb:
     image: mongo
