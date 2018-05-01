@@ -1,0 +1,36 @@
+version: "3.4"
+
+networks:
+
+  proxy:
+    external: true
+
+services:
+
+  proxy:
+    image: vfarcic/docker-flow-proxy:${TAG:-18.04.06-12}
+    ports:
+      - 80:80
+    networks:
+      - proxy
+    environment:
+      - LISTENER_ADDRESS=swarm-listener
+    deploy:
+      placement:
+        constraints:
+          - node.role == worker
+
+
+  swarm-listener:
+    image: vfarcic/docker-flow-swarm-listener:${DFPSL:-18.04.12-7}
+    networks:
+      - proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DF_NOTIFY_CREATE_SERVICE_URL=http://proxy:8080/v1/docker-flow-proxy/reconfigure
+      - DF_NOTIFY_REMOVE_SERVICE_URL=http://proxy:8080/v1/docker-flow-proxy/remove
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
