@@ -1,0 +1,23 @@
+version: '3.4'
+
+networks:
+  proxy:
+    external: true
+
+services:
+
+  split-test:
+    image: patrickleet/split-test:${VERSION}
+    environment:
+      NODE_ENV: production
+    networks:
+      - proxy
+    deploy:
+      placement:
+        constraints:
+          - node.role == worker
+      labels:
+        - com.df.notify=true
+        - com.df.servicePath=/
+        - com.df.port=3000
+    

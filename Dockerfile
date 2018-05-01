@@ -33,6 +33,6 @@ COPY --from=build /src/.next .next
 HEALTHCHECK --interval=5s \
             --timeout=5s \
             --retries=6 \
-            CMD curl -fs http://localhost:$PORT/_health || exit 1
+            CMD curl -fs http://localhost:$PORT/ || exit 1
 
 CMD ["npm", "run", "start"]
