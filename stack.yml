@@ -18,6 +18,6 @@ services:
           - node.role == worker
       labels:
         - com.df.notify=true
-        - com.df.servicePath=/
+        - com.df.serviceDomain=$DOMAIN
         - com.df.port=3000
     
