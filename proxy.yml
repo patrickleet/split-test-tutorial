@@ -11,6 +11,7 @@ services:
     image: vfarcic/docker-flow-proxy:${TAG:-18.04.06-12}
     ports:
       - 80:80
+      - 443:443
     networks:
       - proxy
     environment:
